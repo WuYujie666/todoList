@@ -37,3 +37,12 @@ npm run build
 ```sh
 npm run lint
 ```
+
+功能
+
+1. 改变任务顺序
+2. 分为几个状态板块 一键开启软件
+
+问题：
+
+1. 架构。父子关系？TodoForm是不是不应该式TodoList的儿子而是兄弟，不然todoForm无法复用给DoneList
