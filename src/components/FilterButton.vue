@@ -3,8 +3,19 @@
 </template>
 <script setup>
 import { ref, computed } from 'vue'
-let isDisplay = ref(false)
+let isDisplay = defineModel()
 let displayComplete = computed(() => {
-    return isDisplay.value ? '隐藏已完成' : '显示已完成'
+    return isDisplay.value ? '显示全部' : '隐藏已完成任务' //逻辑不复杂，应该直接写进template
 })
 </script>
+<style scoped>
+button {
+    width: 50px;
+    height: 44px;
+    margin: 0 10px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+</style>

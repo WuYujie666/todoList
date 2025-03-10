@@ -3,11 +3,15 @@ import Todolist from './components/TodoList.vue'
 </script>
 
 <template>
-    <header><h1>TodoList</h1></header>
-
+    <header></header>
     <main>
         <Todolist />
     </main>
 </template>
 
-<style scoped></style>
+<style>
+* {
+    color: #ffffff;
+    font-family: '微软雅黑', '黑体', Arial;
+}
+</style>
