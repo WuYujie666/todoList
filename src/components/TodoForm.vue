@@ -7,7 +7,9 @@
             placeholder="请输入新任务..."
             v-model="newContent"
             class="inputBox roundBorder"
+            v-on:keyup.enter="submit"
         />
+        <!-- v-on:keyup.enter="submit"回车提交 -->
         <input
             type="date"
             id="start"
@@ -39,7 +41,7 @@ function submit() {
     justify-content: center;
     margin: auto 5%;
 }
-input {
+.formLine input {
     width: 300px;
     height: 40px;
     margin: auto 7px;
@@ -52,6 +54,12 @@ input[type='date']::-webkit-calendar-picker-indicator {
     position: relative;
     left: -13px;
 }
+input:focus {
+    border-radius: 30px;
+    outline: none;
+    height: 32px;
+    border: 8px solid var(--second-color);
+}
 .roundBorder {
     border-radius: 6px;
     border: 2px solid var(--second-color);
@@ -59,7 +67,10 @@ input[type='date']::-webkit-calendar-picker-indicator {
 .formLine button {
     width: 50px;
     height: 44px;
-    margin: auto 7px;
-    background-color: var(--second-color);
+}
+.formLine button:active {
+    border-radius: 30px;
+    outline: none;
+    border: 8px solid var(--second-color);
 }
 </style>

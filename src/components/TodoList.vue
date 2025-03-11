@@ -71,18 +71,20 @@ function getTodoById(id: number): TodoItem {
     display: flex;
     justify-content: center; /* 水平居中 */
     align-items: center; /* 垂直居中 */
-    height: 97.8vh; /*为什么*/
-    background-color: #2d1b69; /* 背景颜色 */
+    min-height: 97vh;
+    background-color: var(--main-color); /* 背景颜色 */
     border-radius: 10px;
 }
 
 .bigContainer {
     outline: #6c6096 solid 1px;
     border-radius: 10px;
-    height: 50%;
+    min-height: 50vh;
+    max-height: 100vh;
     width: 50%;
     padding: 0px;
     background-color: #4c3d7f;
+    margin: 20px 0;
 }
 
 h1 {
@@ -94,7 +96,12 @@ h1 {
 }
 ul {
     list-style-type: none;
-    padding: 0px;
-    margin: 0px;
+    padding: 20px;
+    margin: 10px 40px 15px 40px;
+    background-color: var(--main-color);
+    border-radius: 10px;
+}
+li {
+    margin: 10px 10px;
 }
 </style>

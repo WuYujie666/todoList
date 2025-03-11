@@ -9,6 +9,7 @@
             v-on:click="toggleCompleted"
         />
         {{ item.content }}
+        日期
         <button @click="deleteItem">删除</button>
         <!-- 未完成 -->
     </li>
@@ -37,5 +38,9 @@ function deleteItem() {
 <style scoped>
 .completed {
     text-decoration: line-through;
+}
+input {
+    transform: scale(1.6);
+    margin-right: 5px;
 }
 </style>
