@@ -3,29 +3,26 @@ import TodoItem from './TodoItem.vue'
 import TodoForm from './TodoForm.vue'
 import FilterButton from './FilterButton.vue'
 import { computed, ref } from 'vue'
+import { type Item } from '@/types'
 let id = 0
-const todoList = ref<TodoItem[]>([
+const todoList = ref<Array<Item>>([
     { id: id++, content: '任务 1', completed: false },
     { id: id++, content: '任务 2', completed: false },
     { id: id++, content: '任务 3', completed: false },
 ])
 let isDisplay = ref(false)
 const filteredTodos = computed(() => {
-    return isDisplay.value
-        ? todoList.value.filter((item: TodoItem) => !item.completed)
-        : todoList.value
+    return isDisplay.value ? todoList.value.filter((item: Item) => !item.completed) : todoList.value
 })
-function getTodoById(id: number): TodoItem {
-    return todoList.value.find((item: TodoItem) => item.id === id)
-}
+
 // const incompletedList = computed(
-//     () => <TodoItem[]>todoList.value.filter((item: TodoItem) => item.completed == false),
+//     () => <Item[]>todoList.value.filter((item: Item) => item.completed == false),
 // )
 // const completedList = computed(
-//     () => <TodoItem[]>todoList.value.filter((item: TodoItem) => item.completed == true),
+//     () => <Item[]>todoList.value.filter((item: Item) => item.completed == true),
 // )
 //const filteredTodoList=computed(()=>{})
-// const todoList = ref<TodoItem[]>([])
+// const todoList = ref<Item[]>([])
 </script>
 
 <template>
@@ -48,11 +45,17 @@ function getTodoById(id: number): TodoItem {
                 <TodoItem
                     v-for="(item, id) in filteredTodos"
                     :key="id"
-                    v-bind="item"
+                    :item="item"
                     v-on:toggleCompleted="
-                        () => {
-                            let i = getTodoById(id)
-                            i.completed = !i.completed
+                        (id: number) => {
+                            const target = todoList.find((item: Item) => {
+                                console.log(item.id + id)
+                                return item.id === id
+                            })
+                            if (target) {
+                                target.completed = !target.completed
+                                console.log('修改成功')
+                            } else console.log('查找不到' + item.id)
                         }
                     "
                     v-on:deleteItem="
@@ -61,6 +64,7 @@ function getTodoById(id: number): TodoItem {
                 />
                 <!--  切换真假 是=!，不是!= -->
                 <!-- <li v-for="(item, index) in todoList" :key="index">{{ item }}</li> -->
+                <!-- :item="item"，之前这里少了一个item -->
             </ul>
         </div>
     </div>

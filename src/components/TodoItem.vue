@@ -5,7 +5,7 @@
             type="checkbox"
             id="item"
             name="item"
-            v-bind="item.completed"
+            v-bind:checked="item.completed"
             v-on:click="toggleCompleted"
         />
         {{ item.content }}
@@ -14,13 +14,11 @@
         <!-- 未完成 -->
     </li>
 </template>
-<script setup>
-const item = defineProps({
-    //为什么大写？
-    id: Number,
-    content: String,
-    completed: Boolean,
-})
+<script setup lang="ts">
+import { type Item } from '@/types'
+const itemObj = defineProps<{ item: Item }>()
+let item = itemObj.item
+
 const emit = defineEmits(['toggleCompleted', 'deleteItem'])
 
 function toggleCompleted() {
@@ -40,7 +38,9 @@ function deleteItem() {
     text-decoration: line-through;
 }
 input {
-    transform: scale(1.6);
+    width: 20px; /* 设置复选框的宽度 */
+    height: 20px; /* 设置复选框的高度 */
     margin-right: 5px;
+    vertical-align: middle;
 }
 </style>
