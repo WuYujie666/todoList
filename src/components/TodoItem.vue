@@ -1,13 +1,7 @@
 <template>
     <li v-bind:class="{ completed: item.completed }">
         <!-- 不要把v-on:click写在这里，会变成点字变 -->
-        <input
-            type="checkbox"
-            id="item"
-            name="item"
-            v-bind:checked="item.completed"
-            v-on:click="toggleCompleted"
-        />
+        <input type="checkbox" id="item" name="item" v-model="item.completed" />
         {{ item.content }}
         日期
         <button @click="deleteItem">删除</button>
@@ -19,14 +13,11 @@ import { type Item } from '@/types'
 const itemObj = defineProps<{ item: Item }>()
 let item = itemObj.item
 
-const emit = defineEmits(['toggleCompleted', 'deleteItem'])
+const emit = defineEmits(['deleteItem'])
 
-function toggleCompleted() {
-    emit('toggleCompleted')
-    // item.completed = !item.completed//无法访问
-}
 function deleteItem() {
-    emit('deleteItem')
+    emit('deleteItem', item.id)
+    console.log('子删除' + item.id)
 }
 // vue中最好不要直接操作dom。if (item.completed) document.getElementById('item').classList.remove('completed')
 // else document.getElementById('item').classList.add('completed')

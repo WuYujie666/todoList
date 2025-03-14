@@ -7,14 +7,16 @@ import { type Item } from '@/types'
 let id = 0
 const todoList = ref<Array<Item>>([
     { id: id++, content: '任务 1', completed: false },
-    { id: id++, content: '任务 2', completed: false },
+    { id: id++, content: '任务 2', completed: true },
     { id: id++, content: '任务 3', completed: false },
 ])
 let isDisplay = ref(false)
 const filteredTodos = computed(() => {
     return isDisplay.value ? todoList.value.filter((item: Item) => !item.completed) : todoList.value
 })
-
+function getIndexById(idToFind: number): number {
+    return todoList.value.findIndex((element) => element.id === idToFind)
+}
 // const incompletedList = computed(
 //     () => <Item[]>todoList.value.filter((item: Item) => item.completed == false),
 // )
@@ -42,24 +44,15 @@ const filteredTodos = computed(() => {
             />
             <FilterButton v-model="isDisplay" />
             <ul>
+                <!-- <li v-for="(item, index) in todoList" 这里第二个参数无论形参什么名字，实参都是index。如果你可能删除元素，那么不要用index-->
                 <TodoItem
-                    v-for="(item, id) in filteredTodos"
-                    :key="id"
+                    v-for="item in filteredTodos"
+                    :key="item.id"
                     :item="item"
-                    v-on:toggleCompleted="
-                        (id: number) => {
-                            const target = todoList.find((item: Item) => {
-                                console.log(item.id + id)
-                                return item.id === id
-                            })
-                            if (target) {
-                                target.completed = !target.completed
-                                console.log('修改成功')
-                            } else console.log('查找不到' + item.id)
-                        }
-                    "
                     v-on:deleteItem="
-                        () => todoList.splice(id, 1) //这个地方就是不能.value
+                        (itemId) => {
+                            todoList.splice(getIndexById(itemId), 1)
+                        } //这个地方就是不能.value
                     "
                 />
                 <!--  切换真假 是=!，不是!= -->
