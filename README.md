@@ -1,3 +1,7 @@
+这是一个为了练习Vue3和typescript建立的简单的学习项目，ui模仿了https://github.com/abdellatif-laghjaj/todo-list
+仅作学习记录使用
+以下readme是自动生成的
+
 # todoList
 
 This template should help get you started developing with Vue 3 in Vite.
