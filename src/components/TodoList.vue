@@ -32,16 +32,7 @@ function getIndexById(idToFind: number): number {
         <div class="bigContainer">
             <h1>Todo List</h1>
             <!-- 太神奇了写header里就不行 -->
-            <TodoForm
-                v-on:addItem="
-                    (newContent: string) =>
-                        todoList.push({
-                            content: newContent,
-                            completed: false,
-                            id: id++,
-                        })
-                "
-            />
+            <TodoForm v-on:addItem="(newItem: Item) => todoList.push(newItem)" />
             <FilterButton v-model="isDisplay" />
             <ul>
                 <!-- <li v-for="(item, index) in todoList" 这里第二个参数无论形参什么名字，实参都是index。如果你可能删除元素，那么不要用index-->
@@ -81,7 +72,7 @@ function getIndexById(idToFind: number): number {
     width: 50%;
     padding: 0px;
     background-color: #4c3d7f;
-    margin: 20px 0;
+    margin: 10px 0;
 }
 
 h1 {

@@ -12,6 +12,6 @@ let displayComplete = computed(() => {
 button {
     width: 50px;
     height: 35px;
-    margin: 15px 0px 5px 40px;
+    margin: 20px 0px 5px 40px;
 }
 </style>

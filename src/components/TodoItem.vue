@@ -2,17 +2,21 @@
     <li v-bind:class="{ completed: item.completed }">
         <!-- 不要把v-on:click写在这里，会变成点字变 -->
         <input type="checkbox" id="item" name="item" v-model="item.completed" />
-        {{ item.content }}
-        日期
+        {{ item.content }} {{ dateString }}
         <button @click="deleteItem">删除</button>
         <!-- 未完成 -->
     </li>
 </template>
 <script setup lang="ts">
 import { type Item } from '@/types'
+import { computed } from 'vue'
 const itemObj = defineProps<{ item: Item }>()
 let item = itemObj.item
-
+const dateString = computed(() => {
+    if (item.date && item.date instanceof Date) {
+        return item.date.toISOString().split('T')[0]
+    } else return '无截止日期'
+})
 const emit = defineEmits(['deleteItem'])
 
 function deleteItem() {

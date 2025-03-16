@@ -8,34 +8,43 @@
             v-model="newContent"
             class="inputBox roundBorder"
             v-on:keyup.enter="submit"
-        />
-        <!-- v-on:keyup.enter="submit"回车提交 -->
+        /><!-- v-on:keyup.enter="submit"回车提交 -->
+
         <input
             type="date"
             id="start"
             name="trip-start"
-            value="2023-01-01"
             class="inputBox roundBorder"
+            v-model="newDateString"
         />
         <button v-on:click="submit" class="roundBorder">✔</button>
     </div>
 </template>
-<script setup>
+<script setup lang="ts">
+import type { Item } from '@/types'
 import { ref } from 'vue'
+let newId = 3
 const newContent = ref('')
 const emit = defineEmits(['addItem'])
+const newDateString = ref<string>()
 function submit() {
-    emit('addItem', newContent.value)
+    if (newContent.value === '') {
+        alert('请输入内容')
+        return
+    }
+    const newItem: Item = {
+        id: newId++,
+        content: newContent.value,
+        completed: false,
+    }
+    if (newDateString.value) {
+        newItem.date = new Date(newDateString.value)
+    }
+    emit('addItem', newItem)
     newContent.value = ''
 }
 </script>
-<style>
-:root {
-    --main-color: #2d1b69;
-    --second-color: #58c7f3;
-    --text-color: #ffffff;
-}
-
+<style scoped>
 .formLine {
     display: flex;
     justify-content: center;
@@ -50,27 +59,24 @@ function submit() {
     text-indent: 8px;
     /* 好神奇啊 */
 }
+/* date显示字往右移动 */
 input[type='date']::-webkit-calendar-picker-indicator {
     position: relative;
     left: -13px;
 }
-input:focus {
+input:focus,
+.formLine button:active {
     border-radius: 30px;
-    outline: none;
-    height: 32px;
-    border: 8px solid var(--second-color);
+    outline: 10px solid var(--second-color);
 }
+
 .roundBorder {
     border-radius: 6px;
-    border: 2px solid var(--second-color);
+    border: none;
+    outline: 2px solid var(--second-color);
 }
 .formLine button {
     width: 50px;
-    height: 44px;
-}
-.formLine button:active {
-    border-radius: 30px;
-    outline: none;
-    border: 8px solid var(--second-color);
+    height: 40px;
 }
 </style>

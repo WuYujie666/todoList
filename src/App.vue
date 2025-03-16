@@ -21,4 +21,9 @@ button {
     border-radius: 5px;
     border-color: var(--second-color);
 }
+:root {
+    --main-color: #2d1b69;
+    --second-color: #58c7f3;
+    --text-color: #ffffff;
+}
 </style>
