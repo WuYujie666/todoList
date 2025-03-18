@@ -7,8 +7,8 @@ import { type Item } from '@/types'
 let id = 0
 const todoList = ref<Array<Item>>([
     { id: id++, content: '任务 1', completed: false },
-    { id: id++, content: '任务 2', completed: true },
-    { id: id++, content: '任务 3', completed: false },
+    { id: id++, content: '任务 2', date: new Date(), completed: false },
+    { id: id++, content: '任务 3', completed: true },
 ])
 let isDisplay = ref(false)
 const filteredTodos = computed(() => {
@@ -34,22 +34,31 @@ function getIndexById(idToFind: number): number {
             <!-- 太神奇了写header里就不行 -->
             <TodoForm v-on:addItem="(newItem: Item) => todoList.push(newItem)" />
             <FilterButton v-model="isDisplay" />
-            <ul>
+            <table>
+                <thead>
+                    <tr>
+                        <th>任务</th>
+                        <th>日期</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
                 <!-- <li v-for="(item, index) in todoList" 这里第二个参数无论形参什么名字，实参都是index。如果你可能删除元素，那么不要用index-->
-                <TodoItem
-                    v-for="item in filteredTodos"
-                    :key="item.id"
-                    :item="item"
-                    v-on:deleteItem="
-                        (itemId) => {
-                            todoList.splice(getIndexById(itemId), 1)
-                        } //这个地方就是不能.value
-                    "
-                />
-                <!--  切换真假 是=!，不是!= -->
-                <!-- <li v-for="(item, index) in todoList" :key="index">{{ item }}</li> -->
-                <!-- :item="item"，之前这里少了一个item -->
-            </ul>
+                <tbody>
+                    <TodoItem
+                        v-for="item in filteredTodos"
+                        :key="item.id"
+                        :item="item"
+                        v-on:deleteItem="
+                            (itemId) => {
+                                todoList.splice(getIndexById(itemId), 1)
+                            } //这个地方就是不能.value
+                        "
+                    />
+                    <!--  切换真假 是=!，不是!= -->
+                    <!-- <li v-for="(item, index) in todoList" :key="index">{{ item }}</li> -->
+                    <!-- :item="item"，之前这里少了一个item -->
+                </tbody>
+            </table>
         </div>
     </div>
 </template>
@@ -82,14 +91,28 @@ h1 {
     font-size: 30px;
     font-weight: bold;
 }
-ul {
-    list-style-type: none;
-    padding: 20px;
-    margin: 10px 40px 15px 40px;
+table {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2%;
+    margin-bottom: 3%;
     background-color: var(--main-color);
     border-radius: 10px;
+    width: 88%;
+    height: 100%;
+    overflow: hidden;
 }
-li {
-    margin: 10px 10px;
+table tr:nth-child(odd) {
+    background-color: var(--main-color);
+}
+table tr:nth-child(even) {
+    background-color: var(--darker-main-color);
+}
+
+table thead tr th {
+    padding: 5px, 0px;
+    background-color: var(--darker-main-color);
+    border-radius: 10px, 10px, 0px, 0px;
+    /* 圆角失效 */
 }
 </style>

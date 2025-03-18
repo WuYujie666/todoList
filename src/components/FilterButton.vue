@@ -1,5 +1,7 @@
 <template>
-    <button @click="() => (isDisplay = !isDisplay)">{{ displayComplete }}</button>
+    <button @click="() => (isDisplay = !isDisplay)" title="隐藏/显示已完成任务">
+        {{ displayComplete }}
+    </button>
 </template>
 <script setup>
 import { ref, computed } from 'vue'

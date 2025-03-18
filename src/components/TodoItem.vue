@@ -1,11 +1,17 @@
 <template>
-    <li v-bind:class="{ completed: item.completed }">
+    <tr v-bind:class="{ completed: item.completed }">
         <!-- 不要把v-on:click写在这里，会变成点字变 -->
-        <input type="checkbox" id="item" name="item" v-model="item.completed" />
-        {{ item.content }} {{ dateString }}
-        <button @click="deleteItem">删除</button>
+        <th>{{ item.content }}</th>
+        <th>{{ dateString }}</th>
+        <th>
+            <input type="checkbox" id="item" name="item" v-model="item.completed" /><button
+                @click="deleteItem"
+            >
+                删除
+            </button>
+        </th>
         <!-- 未完成 -->
-    </li>
+    </tr>
 </template>
 <script setup lang="ts">
 import { type Item } from '@/types'
