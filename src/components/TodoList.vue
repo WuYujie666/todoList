@@ -4,10 +4,12 @@ import TodoForm from './TodoForm.vue'
 import FilterButton from './FilterButton.vue'
 import { computed, ref } from 'vue'
 import { type Item } from '@/types'
+import { useRoute } from 'vue-router'
+
 let id = 0
 const todoList = ref<Array<Item>>([
     { id: id++, content: '任务 1', completed: false },
-    { id: id++, content: '任务 2', date: new Date(), completed: false },
+    { id: id++, content: '任务 2', date: new Date(), completed: false, detail: '步骤1步骤2步骤3' },
     { id: id++, content: '任务 3', completed: true },
 ])
 let isDisplay = ref(false)
@@ -17,14 +19,6 @@ const filteredTodos = computed(() => {
 function getIndexById(idToFind: number): number {
     return todoList.value.findIndex((element) => element.id === idToFind)
 }
-// const incompletedList = computed(
-//     () => <Item[]>todoList.value.filter((item: Item) => item.completed == false),
-// )
-// const completedList = computed(
-//     () => <Item[]>todoList.value.filter((item: Item) => item.completed == true),
-// )
-//const filteredTodoList=computed(()=>{})
-// const todoList = ref<Item[]>([])
 </script>
 
 <template>

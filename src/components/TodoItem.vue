@@ -4,31 +4,38 @@
         <th>{{ item.content }}</th>
         <th>{{ dateString }}</th>
         <th>
-            <input type="checkbox" id="item" name="item" v-model="item.completed" /><button
-                @click="deleteItem"
+            <input type="checkbox" id="item" name="item" v-model="item.completed" />
+            <button @click="deleteItem">删除</button>
+            <RouterLink
+                :to="{
+                    path: '/detail',
+                    query: { detailContent: item.detail },
+                }"
             >
-                删除
-            </button>
+                <button>详情</button>
+            </RouterLink>
         </th>
-        <!-- 未完成 -->
     </tr>
+    <RouterView></RouterView>
 </template>
 <script setup lang="ts">
 import { type Item } from '@/types'
-import { computed } from 'vue'
-const itemObj = defineProps<{ item: Item }>()
-let item = itemObj.item
-const dateString = computed(() => {
-    if (item.date && item.date instanceof Date) {
-        return item.date.toISOString().split('T')[0]
-    } else return '无截止日期'
-})
+import TaskDetail from '@/views/TaskDetail.vue'
+import { useDate } from '@/hooks/useDate'
+import { RouterView, RouterLink } from 'vue-router'
+// 定义 props 和 emits
+const { item } = defineProps<{ item: Item }>()
 const emit = defineEmits(['deleteItem'])
 
+// 使用自定义 Hook 格式化日期
+const { dateString } = useDate(item.date)
+
+// 删除任务函数
 function deleteItem() {
     emit('deleteItem', item.id)
     console.log('子删除' + item.id)
 }
+
 // vue中最好不要直接操作dom。if (item.completed) document.getElementById('item').classList.remove('completed')
 // else document.getElementById('item').classList.add('completed')
 // 永久删除，不适合用计算属性。const deleteItem = computed(() => {})

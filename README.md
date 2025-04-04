@@ -1,12 +1,13 @@
-这是一个为了练习Vue3和typescript建立的简单的学习项目，ui模仿了https://github.com/abdellatif-laghjaj/todo-list
-仅作学习记录使用
-以下readme是自动生成的
-
 # todoList
 
-This template should help get you started developing with Vue 3 in Vite.
+这是一个基于Vue3和typescript的学习项目，ui模仿了https://github.com/abdellatif-laghjaj/todo-list，支持任务的增添、删除、日期选择、状态筛选、查看详情
+仅作学习记录使用
 
-## Recommended IDE Setup
+# 计划功能
+
+1. 拖动改变任务顺序
+2. 提交检查非空
+3. 数据持久化（保存到本地）
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
 
@@ -41,16 +42,3 @@ npm run build
 ```sh
 npm run lint
 ```
-
-功能
-
-1. 改变任务顺序
-2. 提交检查非空
-3. +日期
-
-问题：
-
-1. 架构。父子关系？TodoForm是不是不应该式TodoList的儿子而是兄弟，不然todoForm无法复用给DoneList
-2. 父容器根据子容器伸缩 已解决 min-height: 50vh; max-height: 100vh;
-3. 由于2，上下改变一点（比如focus input改变几px的边框）、整个父容器就会伸缩，视觉体验凌乱。
-4. 完成复选框选中后歪

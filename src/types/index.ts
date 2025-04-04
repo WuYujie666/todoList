@@ -3,4 +3,5 @@ export interface Item {
     content: string
     date?: Date
     completed: boolean
+    detail?: string
 }
