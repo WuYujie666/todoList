@@ -9,7 +9,7 @@
             <RouterLink
                 :to="{
                     path: '/detail',
-                    query: { detailContent: item.detail },
+                    query: { id: item.id },
                 }"
             >
                 <button>详情</button>

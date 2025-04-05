@@ -3,22 +3,16 @@ import TodoItem from './TodoItem.vue'
 import TodoForm from './TodoForm.vue'
 import FilterButton from './FilterButton.vue'
 import { computed, ref } from 'vue'
-import { type Item } from '@/types'
-import { useRoute } from 'vue-router'
+import { useTodo } from '@/stores/todo.ts' // Import the Pinia store
+import type { Item } from '@/types'
+const isDisplay = ref<boolean>(true)
+const todoStore = useTodo() // Use the store
 
-let id = 0
-const todoList = ref<Array<Item>>([
-    { id: id++, content: '任务 1', completed: false },
-    { id: id++, content: '任务 2', date: new Date(), completed: false, detail: '步骤1步骤2步骤3' },
-    { id: id++, content: '任务 3', completed: true },
-])
-let isDisplay = ref(false)
 const filteredTodos = computed(() => {
-    return isDisplay.value ? todoList.value.filter((item: Item) => !item.completed) : todoList.value
+    return isDisplay.value
+        ? todoStore.todoList
+        : todoStore.todoList.filter((item: Item) => !item.completed)
 })
-function getIndexById(idToFind: number): number {
-    return todoList.value.findIndex((element) => element.id === idToFind)
-}
 </script>
 
 <template>
@@ -26,7 +20,7 @@ function getIndexById(idToFind: number): number {
         <div class="bigContainer">
             <h1>Todo List</h1>
             <!-- 太神奇了写header里就不行 -->
-            <TodoForm v-on:addItem="(newItem: Item) => todoList.push(newItem)" />
+            <TodoForm v-on:addItem="(newItem) => todoStore.addItem(newItem)" />
             <FilterButton v-model="isDisplay" />
             <table>
                 <thead>
@@ -42,15 +36,8 @@ function getIndexById(idToFind: number): number {
                         v-for="item in filteredTodos"
                         :key="item.id"
                         :item="item"
-                        v-on:deleteItem="
-                            (itemId) => {
-                                todoList.splice(getIndexById(itemId), 1)
-                            } //这个地方就是不能.value
-                        "
+                        v-on:deleteItem="(itemId) => todoStore.deleteItem(itemId)"
                     />
-                    <!--  切换真假 是=!，不是!= -->
-                    <!-- <li v-for="(item, index) in todoList" :key="index">{{ item }}</li> -->
-                    <!-- :item="item"，之前这里少了一个item -->
                 </tbody>
             </table>
         </div>

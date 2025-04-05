@@ -7,7 +7,7 @@
 import { ref, computed } from 'vue'
 let isDisplay = defineModel()
 let displayComplete = computed(() => {
-    return isDisplay.value ? '显示' : '隐藏' //逻辑不复杂，应该直接写进template
+    return isDisplay.value ? '隐藏' : '显示' //逻辑不复杂，应该直接写进template
 })
 </script>
 <style scoped>

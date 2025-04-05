@@ -9,12 +9,22 @@
     </div>
 </template>
 <script setup lang="ts" name="TaskDetail">
-import { useRoute, useRouter } from 'vue-router'
-import { defineEmits, ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { defineEmits, ref, computed } from 'vue'
+import { useTodo } from '@/stores/todo.ts' // Import the Pinia store
 
 const router = useRouter()
 const route = useRoute()
-const detailContent = ref(String(route.query.detailContent || ''))
+const todoStore = useTodo() // Use the store
+const detailContent = computed({
+    get: () => todoStore.todoList.find((item) => item.id === Number(route.query.id))?.detail || '',
+    set: (value) => {
+        const task = todoStore.todoList.find((item) => item.id === Number(route.query.id))
+        if (task) {
+            task.detail = value // Update the detail in the store
+        }
+    },
+})
 const emit = defineEmits(['updateContent'])
 
 function closeDetail() {
@@ -44,12 +54,13 @@ function closeDetail() {
     /* 其他按钮样式 */
 }
 .detailInput {
-    width: 100%; /* 使文本框宽度适应容器 */
+    width: 210px; /* 使文本框宽度适应容器 */
     height: 200px; /* 设置文本框高度 */
     border-radius: 5px; /* 圆角边框 */
     border: none; /* 边框样式 */
     margin: 10px;
     padding: 10px; /* 内边距 */
     background-color: var(--main-color);
+    resize: none;
 }
 </style>
