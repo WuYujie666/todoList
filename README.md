@@ -1,13 +1,22 @@
 # todoList
 
-这是一个基于Vue3和typescript的学习项目，ui模仿了https://github.com/abdellatif-laghjaj/todo-list，支持任务的增添、删除、日期选择、状态筛选、查看详情
+这是一个基于 Vue 3 + TypeScript 开发的 Todo List 学习项目，主要功能包括：
+
+- 任务管理：新增/删除任务
+- 日期选择：为任务设置截止日期
+- 状态筛选：按完成状态筛选任务
+- 详情查看：通过 Vue Router 实现任务详情页
+
+技术实现：
+- 状态管理：使用 Pinia 并实现数据持久化存储
+- UI 设计：参考了 abdellatif-laghjaj/todo-list 的界面风格
+
 仅作学习记录使用
+![image](https://github.com/user-attachments/assets/09cf072d-77e1-42e9-a221-e67e4136e908)
 
 # 计划功能
 
 1. 拖动改变任务顺序
-2. 提交检查非空
-3. 数据持久化（保存到本地）
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
 
