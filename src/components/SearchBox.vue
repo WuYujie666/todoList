@@ -40,7 +40,7 @@ const handleKeyup = (event: KeyboardEvent) => {
 
 <style scoped>
 .search-container {
-    margin: 10px auto;
+    margin: 15px auto;
     width: 88%;
 }
 
@@ -53,17 +53,17 @@ const handleKeyup = (event: KeyboardEvent) => {
 .search-input {
     flex: 1;
     padding: 8px 12px;
-    border: 1px solid var(--second-color);
-    border-radius: 5px;
+    border: none;
+    border-radius: 6px;
     background-color: var(--main-color);
     color: var(--text-color);
     font-size: 14px;
+    outline: 2px solid var(--second-color);
 }
 
 .search-input:focus {
-    outline: none;
-    border-color: var(--second-color);
-    box-shadow: 0 0 0 2px rgba(88, 199, 243, 0.2);
+    border-radius: 30px;
+    outline: 10px solid var(--second-color);
 }
 
 .search-input::placeholder {
@@ -75,14 +75,20 @@ const handleKeyup = (event: KeyboardEvent) => {
     background-color: var(--second-color);
     color: var(--text-color);
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
+    outline: 2px solid var(--second-color);
 }
 
 .search-btn:hover {
     background-color: #4ab8e3;
+}
+
+.search-btn:active {
+    border-radius: 30px;
+    outline: 10px solid var(--second-color);
 }
 
 .clear-btn {
@@ -93,6 +99,7 @@ const handleKeyup = (event: KeyboardEvent) => {
     cursor: pointer;
     font-size: 18px;
     line-height: 1;
+    transition: color 0.2s;
 }
 
 .clear-btn:hover {
@@ -101,7 +108,7 @@ const handleKeyup = (event: KeyboardEvent) => {
 
 @media screen and (max-width: 768px) {
     .search-container {
-        width: 95%;
+        width: 89%;
     }
 
     .search-input {

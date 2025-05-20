@@ -64,6 +64,7 @@ function submit() {
 input[type='date']::-webkit-calendar-picker-indicator {
     position: relative;
     left: -13px;
+    filter: invert(1); /* 将图标颜色改为白色 */
 }
 input:focus,
 .formLine button:active {

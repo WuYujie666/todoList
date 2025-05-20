@@ -107,34 +107,38 @@ table {
     overflow: hidden;
 }
 
-table tr:nth-child(odd) {
-    background-color: var(--main-color);
-}
-
-table tr:nth-child(even) {
-    background-color: var(--darker-main-color);
+table thead {
+    border-radius: 6px 6px 0 0;
 }
 
 table thead tr th {
     padding: 5px 0px;
-    background-color: var(--darker-main-color);
-    border-radius: 10px 10px 0px 0px;
 }
 
 /* 移动端适配 */
 @media screen and (max-width: 768px) {
+    .background {
+        align-items: flex-start;
+        min-height: 100vh;
+    }
+
     .bigContainer {
-        width: 95%;
-        margin: 5px 0;
+        width: 100%;
+        margin: 0;
+        outline: none;
+        background-color: transparent;
+        padding: 0 10px;
     }
 
     h1 {
         font-size: 24px;
+        margin: 10px 0;
     }
 
     table {
         width: 95%;
         font-size: 14px;
+        margin: 10px;
     }
 
     table thead tr th {

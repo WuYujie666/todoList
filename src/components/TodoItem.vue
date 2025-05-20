@@ -1,9 +1,9 @@
 <template>
     <tr v-bind:class="{ completed: item.completed }">
         <!-- 不要把v-on:click写在这里，会变成点字变 -->
-        <th>{{ item.title }}</th>
-        <th>{{ dateString }}</th>
-        <th>
+        <td>{{ item.title }}</td>
+        <td>{{ dateString }}</td>
+        <td>
             <input type="checkbox" id="item" name="item" v-model="item.completed" />
             <button @click="deleteItem">删除</button>
             <RouterLink
@@ -14,7 +14,7 @@
             >
                 <button>详情</button>
             </RouterLink>
-        </th>
+        </td>
     </tr>
     <RouterView></RouterView>
 </template>

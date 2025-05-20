@@ -29,8 +29,16 @@ button {
     --second-color: #58c7f3;
     --text-color: #ffffff;
 }
-th {
-    text-align: left;
-    padding: 3px 0px 3px 10px;
+
+table thead tr {
+    background-color: var(--darker-main-color);
+}
+
+table tbody tr:nth-child(even) {
+    background-color: var(--darker-main-color);
+}
+
+table tbody tr:nth-child(odd) {
+    background-color: var(--main-color);
 }
 </style>
