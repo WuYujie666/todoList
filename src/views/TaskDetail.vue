@@ -29,7 +29,7 @@ const emit = defineEmits(['updateContent'])
 
 function closeDetail() {
     emit('updateContent', detailContent.value)
-    router.push({ path: '/', query: { detailContent: detailContent.value } })
+    router.push('/')
 }
 </script>
 

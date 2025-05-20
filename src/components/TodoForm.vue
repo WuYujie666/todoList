@@ -35,6 +35,7 @@ function submit() {
     const newItem: Item = {
         id: newId++,
         content: newContent.value,
+        title: newContent.value,
         completed: false,
     }
     if (newDateString.value) {

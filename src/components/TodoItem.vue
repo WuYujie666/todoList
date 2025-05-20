@@ -1,7 +1,7 @@
 <template>
     <tr v-bind:class="{ completed: item.completed }">
         <!-- 不要把v-on:click写在这里，会变成点字变 -->
-        <th>{{ item.content }}</th>
+        <th>{{ item.title }}</th>
         <th>{{ dateString }}</th>
         <th>
             <input type="checkbox" id="item" name="item" v-model="item.completed" />
@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import { type Item } from '@/types'
 import TaskDetail from '@/views/TaskDetail.vue'
-import { useDate } from '@/hooks/useDate'
+import { useDate } from '@/composables/useDate'
 import { RouterView, RouterLink } from 'vue-router'
 // 定义 props 和 emits
 const { item } = defineProps<{ item: Item }>()
