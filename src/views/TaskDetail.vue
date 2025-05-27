@@ -11,8 +11,7 @@
 <script setup lang="ts" name="TaskDetail">
 import { useRouter, useRoute } from 'vue-router'
 import { defineEmits, ref, computed } from 'vue'
-import { useTodo } from '@/stores/todo.ts' // Import the Pinia store
-
+import { useTodo } from '@/stores/todo.ts'
 const router = useRouter()
 const route = useRoute()
 const todoStore = useTodo() // Use the store

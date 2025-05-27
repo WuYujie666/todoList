@@ -1,44 +1,15 @@
 <template>
     <tr v-bind:class="{ completed: item.completed }">
-        <!-- 不要把v-on:click写在这里，会变成点字变 -->
-        <td>{{ item.title }}</td>
-        <td>{{ dateString }}</td>
-        <td>
-            <input type="checkbox" id="item" name="item" v-model="item.completed" />
-            <button @click="deleteItem">删除</button>
-            <RouterLink
-                :to="{
-                    path: '/detail',
-                    query: { id: item.id },
-                }"
-            >
-                <button>详情</button>
-            </RouterLink>
-        </td>
+        <!-- 使用插槽，让父组件决定内容 -->
+        <slot></slot>
     </tr>
-    <RouterView></RouterView>
 </template>
+
 <script setup lang="ts">
 import { type Item } from '@/types'
-import TaskDetail from '@/views/TaskDetail.vue'
-import { useDate } from '@/composables/useDate'
-import { RouterView, RouterLink } from 'vue-router'
-// 定义 props 和 emits
+
+// 只需要接收 item 用于判断 completed 状态
 const { item } = defineProps<{ item: Item }>()
-const emit = defineEmits(['deleteItem'])
-
-// 使用自定义 Hook 格式化日期
-const { dateString } = useDate(item.date)
-
-// 删除任务函数
-function deleteItem() {
-    emit('deleteItem', item.id)
-    console.log('子删除' + item.id)
-}
-
-// vue中最好不要直接操作dom。if (item.completed) document.getElementById('item').classList.remove('completed')
-// else document.getElementById('item').classList.add('completed')
-// 永久删除，不适合用计算属性。const deleteItem = computed(() => {})
 </script>
 
 <style scoped>
@@ -46,9 +17,11 @@ function deleteItem() {
     text-decoration: line-through;
 }
 input {
-    width: 20px; /* 设置复选框的宽度 */
-    height: 20px; /* 设置复选框的高度 */
-    margin-right: 5px;
+    width: 15px; /* 设置复选框的宽度 */
+    height: 15px; /* 设置复选框的高度 */
     vertical-align: middle;
+}
+button {
+    margin-left: 5px;
 }
 </style>

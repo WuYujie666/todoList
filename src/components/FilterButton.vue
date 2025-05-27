@@ -12,8 +12,8 @@ let displayComplete = computed(() => {
 </script>
 <style scoped>
 button {
-    width: 50px;
-    height: 35px;
-    margin: 20px 0px 5px 40px;
+    width: auto !important;
+    min-width: 50px;
+    max-width: 120px;
 }
 </style>

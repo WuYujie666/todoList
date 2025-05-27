@@ -12,6 +12,9 @@ export default defineConfig({
             '@': fileURLToPath(new URL('./src', import.meta.url)),
         },
     },
+    css: {
+        devSourcemap: true,
+    },
     test: {
         globals: true,
         environment: 'happy-dom',

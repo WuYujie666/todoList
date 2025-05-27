@@ -14,9 +14,9 @@ import Todolist from './components/TodoList.vue'
     color: #ffffff;
     font-family: '微软雅黑', '黑体', Arial;
     font-weight: normal;
+    font-size: 14px;
 }
 button {
-    margin: auto 7px;
     background-color: var(--second-color);
     cursor: pointer;
     border-radius: 5px;
@@ -26,19 +26,21 @@ button {
     --main-color: #2d1b69;
     --lighter-main-color: #4c3d7f;
     --darker-main-color: #1d0d3b;
-    --second-color: #58c7f3;
+    --second-color: #3dbdf0;
     --text-color: #ffffff;
 }
-
-table thead tr {
-    background-color: var(--darker-main-color);
+@media screen and (max-width: 768px) {
+    td,
+    th {
+        text-align: left;
+        padding: 0px 10px;
+        height: 30px;
+    }
 }
-
-table tbody tr:nth-child(even) {
-    background-color: var(--darker-main-color);
-}
-
-table tbody tr:nth-child(odd) {
-    background-color: var(--main-color);
+td,
+th {
+    text-align: left;
+    padding: 0px 10px;
+    height: 30px;
 }
 </style>

@@ -1,63 +1,81 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 const searchText = ref('')
 const emit = defineEmits(['search', 'clear'])
 
-const handleSearch = () => {
-    if (searchText.value.trim()) {
-        emit('search', searchText.value.trim())
+// 防抖函数
+const debounce = (fn: Function, delay: number) => {
+    let timer: number | null = null
+    return function (this: any, ...args: any[]) {
+        if (timer) clearTimeout(timer)
+        timer = setTimeout(() => {
+            fn.apply(this, args)
+        }, delay)
     }
 }
 
+// 统一的搜索处理函数
+const handleSearch = (value: string) => {
+    const trimmedValue = value.trim()
+    if (trimmedValue) {
+        emit('search', trimmedValue)
+    } else {
+        emit('clear') // 空值时清空搜索
+    }
+}
+
+// 防抖搜索（用于输入时的实时搜索）
+const debouncedSearch = debounce(handleSearch, 300)
+
+// 监听输入变化，实时搜索
+watch(searchText, (newValue) => {
+    debouncedSearch(newValue)
+})
+
+// 清空搜索
 const handleClear = () => {
     searchText.value = ''
     emit('clear')
 }
 
+// Enter键立即搜索（不防抖）
 const handleKeyup = (event: KeyboardEvent) => {
     if (event.key === 'Enter') {
-        handleSearch()
+        handleSearch(searchText.value)
     }
 }
 </script>
 
 <template>
-    <div class="search-container">
-        <div class="search-box">
-            <input
-                type="text"
-                v-model="searchText"
-                @keyup="handleKeyup"
-                placeholder="搜索任务..."
-                class="search-input"
-            />
-            <button v-if="searchText" @click="handleClear" class="clear-btn">×</button>
-            <button @click="handleSearch" class="search-btn">搜索</button>
-        </div>
+    <div class="search-box">
+        <input
+            type="text"
+            v-model="searchText"
+            @keyup="handleKeyup"
+            placeholder="搜索任务..."
+            class="search-input"
+        />
+        <button v-if="searchText" @click="handleClear" class="clear-btn" title="清空搜索">×</button>
     </div>
 </template>
 
 <style scoped>
-.search-container {
-    margin: 15px auto;
-    width: 88%;
-}
-
 .search-box {
     display: flex;
     align-items: center;
     gap: 8px;
+    position: relative;
 }
 
 .search-input {
     flex: 1;
-    padding: 8px 12px;
+    height: 40px;
+    padding: 0 12px;
     border: none;
     border-radius: 6px;
     background-color: var(--main-color);
     color: var(--text-color);
-    font-size: 14px;
     outline: 2px solid var(--second-color);
 }
 
@@ -66,32 +84,9 @@ const handleKeyup = (event: KeyboardEvent) => {
     outline: 10px solid var(--second-color);
 }
 
-.search-input::placeholder {
-    color: #a0a0a0;
-}
-
-.search-btn {
-    padding: 8px 16px;
-    background-color: var(--second-color);
-    color: var(--text-color);
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.2s;
-    outline: 2px solid var(--second-color);
-}
-
-.search-btn:hover {
-    background-color: #4ab8e3;
-}
-
-.search-btn:active {
-    border-radius: 30px;
-    outline: 10px solid var(--second-color);
-}
-
 .clear-btn {
+    position: absolute;
+    right: 8px;
     padding: 4px 8px;
     background: none;
     border: none;
@@ -100,25 +95,11 @@ const handleKeyup = (event: KeyboardEvent) => {
     font-size: 18px;
     line-height: 1;
     transition: color 0.2s;
+    border-radius: 50%;
 }
 
 .clear-btn:hover {
     color: var(--text-color);
-}
-
-@media screen and (max-width: 768px) {
-    .search-container {
-        width: 89%;
-    }
-
-    .search-input {
-        font-size: 14px;
-        padding: 6px 10px;
-    }
-
-    .search-btn {
-        padding: 6px 12px;
-        font-size: 14px;
-    }
+    background-color: rgba(255, 255, 255, 0.1);
 }
 </style>
