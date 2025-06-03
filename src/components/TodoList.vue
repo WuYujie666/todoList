@@ -3,12 +3,12 @@ import TodoItem from './TodoItem.vue'
 import TodoForm from './TodoForm.vue'
 import FilterButton from './FilterButton.vue'
 import SearchBox from './SearchBox.vue'
-import { computed, ref } from 'vue'
+import { computed, ref, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { useTodo } from '@/stores/todo.ts' // Import the Pinia store
 import { useDate } from '@/composables/useDate'
 import type { Item } from '@/types'
-import { RouterLink } from 'vue-router'
 import draggable from 'vuedraggable'
+import { computePosition, offset, flip, shift, arrow } from '@floating-ui/dom'
 
 const isDisplay = ref<boolean>(true)
 const searchQuery = ref('')
@@ -38,6 +38,79 @@ const handleSearch = (query: string) => {
 const handleClearSearch = () => {
     searchQuery.value = ''
 }
+
+// floating-ui 相关逻辑
+const referenceRef = ref<HTMLElement | null>(null)
+const floatingRef = ref<HTMLElement | null>(null)
+const isDetailVisible = ref(false)
+const selectedItem = ref<Item | null>(null)
+const arrowRef = ref<HTMLElement | null>(null)
+
+function showDetail(refEl: HTMLElement, item: Item) {
+    referenceRef.value = refEl
+    selectedItem.value = item
+    isDetailVisible.value = true
+}
+watch([floatingRef], async ([popup]) => {
+    if (isDetailVisible.value && referenceRef.value && popup) {
+        await nextTick()
+        computePosition(referenceRef.value!, popup, {
+            placement: 'right',
+            middleware: [offset(8), flip(), shift(), arrow({ element: arrowRef.value! })], //!断言不是null
+        }).then(({ x, y, placement, middlewareData }) => {
+            Object.assign(popup.style, {
+                left: `${x}px`,
+                top: `${y}px`,
+            })
+            // 设置箭头位置
+            // Accessing the data
+            const arrowData = middlewareData.arrow
+            if (!arrowData) return
+
+            const { x: arrowX, y: arrowY } = arrowData
+            // 动态获取 staticSide
+            const staticSide = {
+                top: 'bottom',
+                right: 'left',
+                bottom: 'top',
+                left: 'right',
+            }[placement.split('-')[0] as 'top' | 'right' | 'bottom' | 'left']
+
+            // 先重置所有方向
+            Object.assign(arrowRef.value!.style, {
+                left: arrowX != null ? `${arrowX}px` : '',
+                top: arrowY != null ? `${arrowY}px` : '',
+                right: '',
+                bottom: '',
+            })
+            // 再设置 staticSide
+            if (['top', 'right', 'bottom', 'left'].includes(staticSide)) {
+                arrowRef.value!.style[staticSide as 'top' | 'right' | 'bottom' | 'left'] = '-4px'
+            }
+        })
+    }
+})
+
+function closeDetail() {
+    isDetailVisible.value = false
+}
+
+function handleClickOutside(event: MouseEvent) {
+    if (
+        isDetailVisible.value &&
+        floatingRef.value &&
+        !floatingRef.value.contains(event.target as Node)
+    ) {
+        closeDetail()
+    }
+}
+
+onMounted(() => {
+    document.addEventListener('mousedown', handleClickOutside)
+})
+onBeforeUnmount(() => {
+    document.removeEventListener('mousedown', handleClickOutside)
+})
 </script>
 
 <template>
@@ -72,25 +145,33 @@ const handleClearSearch = () => {
                         >
                             <td>{{ item.title }}</td>
                             <td>{{ useDate(item.date).dateString }}</td>
-                            <td>
+                            <td class="operations">
                                 <input type="checkbox" v-model="item.completed" />
-                                <button @click="todoStore.deleteItem(item.id)">删除</button>
-                                <RouterLink
-                                    :to="{
-                                        path: '/detail',
-                                        query: { id: item.id },
-                                    }"
+                                <button @click="todoStore.deleteItem(item.id)">×</button>
+                                <button
+                                    @click="showDetail($event.currentTarget as HTMLElement, item)"
                                 >
-                                    <button>详情</button>
-                                </RouterLink>
+                                    ⓘ
+                                </button>
                             </td>
                         </TodoItem>
                     </template>
                 </draggable>
             </table>
         </div>
-        <RouterView />
     </div>
+    <Teleport to="body">
+        <div v-if="isDetailVisible && selectedItem" ref="floatingRef" class="task-detail-popup">
+            <div ref="arrowRef" class="popup-arrow"></div>
+            <div class="details">
+                <textarea
+                    v-model="selectedItem.detail"
+                    class="detailInput"
+                    placeholder="请输入详情..."
+                ></textarea>
+            </div>
+        </div>
+    </Teleport>
 </template>
 
 <style scoped>
@@ -121,7 +202,12 @@ h1 {
     font-size: 30px;
     font-weight: bold;
 }
-
+.operations {
+    display: flex;
+    justify-content: left;
+    gap: 0.625rem;
+    align-items: center;
+}
 table {
     border-radius: 10px;
     width: 88%;
@@ -186,5 +272,64 @@ tbody tr:hover {
         outline: none;
         background-color: transparent;
     }
+}
+
+.task-detail-popup {
+    z-index: 1000;
+    background: transparent; /* 只做定位和阴影 */
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    padding: 0;
+    position: absolute;
+    overflow: visible;
+}
+
+.details {
+    min-width: 15.625rem;
+    max-width: 90vw;
+    min-height: 7.5rem;
+    max-height: 80vh;
+    border-radius: 10px;
+    background-color: var(--main-color);
+    padding: 10px;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+.detailInput {
+    width: 100%;
+    min-height: 6.25rem;
+    max-height: 80vh;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: none;
+    background-color: var(--lighter-main-color);
+    padding: 8px 12px;
+    resize: vertical;
+    box-sizing: border-box;
+    overflow-y: auto;
+    margin: 0;
+    display: block;
+}
+@media (max-width: 600px) {
+    .task-detail-popup,
+    .details {
+        min-width: 7rem;
+        max-width: 90vw;
+        min-height: 10rem;
+        max-height: 60vh;
+    }
+    .detailInput {
+        min-height: 9rem;
+        max-height: 60vh;
+        font-size: 0.95rem;
+    }
+}
+
+.popup-arrow {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: var(--main-color, #fff);
+    transform: rotate(45deg);
 }
 </style>

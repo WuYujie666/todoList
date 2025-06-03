@@ -20,4 +20,8 @@ export default defineConfig({
         environment: 'happy-dom',
         // 其他 Vitest 配置...
     },
+    base: './', // 替换为你的实际仓库名
+    build: {
+        outDir: 'dist',
+    },
 })

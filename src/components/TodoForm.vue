@@ -91,6 +91,8 @@ input:focus,
     cursor: pointer;
     transition: all 0.2s;
     padding: 0;
+    min-width: 3.125rem;
+    min-height: 2.5rem;
 }
 .formLine button:hover {
     background-color: #4ab8e3;
